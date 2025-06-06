@@ -61,14 +61,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      margin-bottom: 20px;
       gap: 10px;
-      margin-bottom: 25px;
     }
 
     .toggle-switch {
       position: relative;
-      width: 60px;
-      height: 30px;
+      width: 50px;
+      height: 24px;
     }
 
     .toggle-switch input {
@@ -84,54 +84,50 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #00ffe0;
-      transition: 0.4s;
-      border-radius: 30px;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
     }
 
     .slider:before {
       position: absolute;
       content: "";
-      height: 22px;
-      width: 22px;
-      left: 4px;
-      bottom: 4px;
-      background-color: #000;
-      transition: 0.4s;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
       border-radius: 50%;
+    }
+
+    .toggle-switch input:checked + .slider {
+      background-color: #00ffe0;
     }
 
     .toggle-switch input:checked + .slider:before {
-      transform: translateX(30px);
+      transform: translateX(26px);
     }
 
-    .circle-container, .chart-container {
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      pointer-events: none;
-      position: absolute;
-      width: 100%;
-      display: flex;
+    .circle-container,
+    .chart-container {
+      display: none;
       justify-content: center;
       align-items: center;
-    }
-
-    .active-view {
-      opacity: 1;
-      pointer-events: auto;
-      position: static;
-    }
-
-    .circle-container {
       margin-bottom: 20px;
     }
 
+    .circle-container.active,
+    .chart-container.active {
+      display: flex;
+    }
+
     .circle {
+      background: #1c1f2e;
+      padding: 30px;
+      border-radius: 50%;
       width: 220px;
       height: 220px;
-      border-radius: 50%;
-      background: radial-gradient(circle at center, #002831, #0f111a);
-      box-shadow: 0 0 30px #00ffe0, 0 0 60px #00ffe0 inset;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -139,74 +135,49 @@
       text-align: center;
     }
 
-    .circle span {
-      color: #00ffe0;
-      font-size: 1em;
-      margin-bottom: 5px;
-    }
-
     .circle h1 {
-      margin: 0;
-      font-size: 1.7em;
-      color: #ffffff;
+      margin: 10px 0;
+      font-size: 1.5em;
     }
 
-    .gain-loss {
-      font-size: 0.95em;
-      margin-top: 4px;
+    .gain-loss.gain {
+      color: #00ff9f;
     }
 
-    .gain { color: #00ff88; }
-    .loss { color: #ff5555; }
-
-    .chart-container {
-      background: #1c1f2e;
-      padding: 14px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      width: 100%;
-    }
-
-    canvas {
-      height: 170px !important;
-    }
-
-    .projections {
-      text-align: center;
-      font-size: 0.95em;
-      margin-bottom: 20px;
-    }
-
-    .projections div {
-      margin: 4px 0;
+    .gain-loss.loss {
+      color: #ff5555;
     }
 
     table {
       width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
       background: #1c1f2e;
       border-radius: 10px;
       overflow: hidden;
-      border-collapse: collapse;
-      margin-bottom: 40px;
     }
 
     th, td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #2b2f40;
-      font-size: 13px;
+      padding: 8px 10px;
+      text-align: center;
     }
 
     th {
-      background: #11141e;
-      color: #00ffe0;
+      background: #00ffe0;
+      color: #000;
+      font-weight: bold;
     }
 
-    td.return { color: #00ff9f; }
-    td.total { color: #ffffff; }
-    td.gain { color: #ffaa00; }
-    td.loss { color: #ff5555; }
+    tr:nth-child(even) {
+      background: #2a2d3f;
+    }
 
+    .projections {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    /* Deposit section styles */
     .deposit-info {
       background: #1c1f2e;
       padding: 20px;
@@ -223,7 +194,13 @@
       background: #11141e;
       padding: 10px;
       border-radius: 6px;
-      word-break: break-word;
+      word-break: break-all;
+      margin-bottom: 10px;
+    }
+
+    .network-info {
+      font-size: 13px;
+      color: #ffaa00;
       margin-bottom: 10px;
     }
 
@@ -254,6 +231,7 @@
     <button id="nav-deposit" onclick="showSection('deposit')">Deposit</button>
   </div>
 
+  <!-- DASHBOARD SECTION -->
   <div id="dashboard" class="section active">
     <div class="controls">
       <span>🔘</span>
@@ -264,7 +242,7 @@
       <span>📈</span>
     </div>
 
-    <div id="circleView" class="circle-container active-view">
+    <div id="circleView" class="circle-container active">
       <div class="circle">
         <span>Investment</span>
         <h1 id="final-value">$0.00</h1>
@@ -273,7 +251,7 @@
     </div>
 
     <div id="chartView" class="chart-container">
-      <canvas id="growthChart"></canvas>
+      <canvas id="growthChart" height="200"></canvas>
     </div>
 
     <div class="projections" id="projections"></div>
@@ -291,13 +269,15 @@
     </table>
   </div>
 
+  <!-- DEPOSIT SECTION -->
   <div id="deposit" class="section">
     <div class="deposit-info">
       <h2>Deposit USDT</h2>
-      <div class="wallet-address" id="walletAddress">TJLkXN7PH8fzfPuafAPzX8TioZiKJZbb3S</div>
+      <div class="network-info">Network: TRC20</div>
+      <div class="wallet-address" id="walletAddress">T9zVD2RxqRM29kZbZykDbx3M6c5eULWm7S</div>
       <button class="copy-btn" onclick="copyAddress()">Copy Address</button>
       <div class="qr-code">
-        <img src="qr-code.JPG" alt="USDT Wallet QR Code" />
+        <img src="qr-placeholder.png" alt="USDT Wallet QR Code" />
       </div>
     </div>
   </div>
@@ -308,9 +288,11 @@
     const redRate = -0.045;
     const startDate = new Date("2025-05-25");
     const today = new Date();
+
     let currentValue = initialInvestment;
+    const labels = [];
+    const values = [];
     const pattern = ['G', 'G', 'R', 'G', 'R', 'G', 'G'];
-    const labels = [], values = [];
 
     const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
 
@@ -329,9 +311,9 @@
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${formattedDate}</td>
-        <td class="return" style="color:${rate > 0 ? '#00ff9f' : '#ff5555'}">${(rate * 100).toFixed(2)}%</td>
-        <td class="total">$${currentValue.toFixed(2)}</td>
-        <td class="${rate > 0 ? 'gain' : 'loss'}">${gain >= 0 ? '+' : ''}$${gain.toFixed(2)}</td>
+        <td style="color:${rate > 0 ? '#00ff9f' : '#ff5555'}">${(rate * 100).toFixed(2)}%</td>
+        <td>$${currentValue.toFixed(2)}</td>
+        <td style="color:${gain >= 0 ? '#00ff9f' : '#ff5555'}">${gain >= 0 ? '+' : ''}$${gain.toFixed(2)}</td>
       `;
       document.getElementById("returns-body").appendChild(tr);
     }
@@ -342,13 +324,13 @@
     diffElem.textContent = `${gainLoss >= 0 ? '+' : ''}$${gainLoss.toFixed(2)}`;
     diffElem.className = `gain-loss ${gainLoss >= 0 ? 'gain' : 'loss'}`;
 
-    function projectValue(daysAhead) {
+    const projectValue = (daysAhead) => {
       let value = currentValue;
       for (let i = 0; i < daysAhead; i++) {
         value *= pattern[(diffDays + i) % 7] === 'R' ? (1 + redRate) : (1 + greenRate);
       }
       return value.toFixed(2);
-    }
+    };
 
     document.getElementById("projections").innerHTML = `
       <div><strong>Projected in 30 days:</strong> $${projectValue(30)}</div>
@@ -393,8 +375,8 @@
 
     function toggleView() {
       const showChart = document.getElementById("viewToggle").checked;
-      document.getElementById("circleView").classList.toggle("active-view", !showChart);
-      document.getElementById("chartView").classList.toggle("active-view", showChart);
+      document.getElementById("circleView").classList.toggle("active", !showChart);
+      document.getElementById("chartView").classList.toggle("active", showChart);
       if (showChart) chart.update();
     }
 
