@@ -164,13 +164,13 @@
     .loss { color: #ff5555; }
 
     .chart-container {
-      background: #1c1f2e;
-      padding: 14px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      width: 100%;
-    }
-
+  background: #1c1f2e;
+  padding: 16px; /* Adjusted from 14px for consistency with .projection-box */
+  border-radius: 10px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding doesn't expand width */
+}
     canvas {
       height: 170px !important;
     }
