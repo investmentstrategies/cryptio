@@ -6,6 +6,14 @@
   <title>Crypto Dashboard</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    html, body {
+      overflow-x: hidden;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -164,13 +172,14 @@
     .loss { color: #ff5555; }
 
     .chart-container {
-  background: #1c1f2e;
-  padding: 16px; /* Adjusted from 14px for consistency with .projection-box */
-  border-radius: 10px;
-  margin-bottom: 20px;
-  width: 100%;
-  box-sizing: border-box; /* Ensures padding doesn't expand width */
-}
+      background: #1c1f2e;
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
     canvas {
       height: 170px !important;
     }
