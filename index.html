@@ -171,14 +171,40 @@
       height: 170px !important;
     }
 
+    /* UPDATED PROJECTIONS SECTION */
     .projections {
+      background: #1c1f2e;
+      padding: 20px;
+      border-radius: 12px;
       text-align: center;
-      font-size: 0.95em;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
-    .projections div {
-      margin: 4px 0;
+    .input-wrapper {
+      background: #11141e;
+      border-radius: 10px;
+      padding: 3px 0;
+      margin-bottom: 12px;
+    }
+
+    .projections input {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 16px;
+      text-align: center;
+      width: 100%;
+      outline: none;
+    }
+
+    .projections input::placeholder {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .projections .result {
+      font-size: 16px;
+      color: #ffffff;
     }
 
     table {
@@ -235,12 +261,12 @@
       border-radius: 5px;
       cursor: pointer;
     }
-    
+
     .network-info {
-  font-size: 13px;
-  color: #ffaa00;
-  margin-bottom: 10px;
-}
+      font-size: 13px;
+      color: #ffaa00;
+      margin-bottom: 10px;
+    }
 
     .qr-code {
       margin-top: 15px;
@@ -282,7 +308,13 @@
       <canvas id="growthChart"></canvas>
     </div>
 
-    <div class="projections" id="projections"></div>
+    <!-- Updated projections section -->
+    <div class="projections">
+      <div class="input-wrapper">
+        <input type="number" id="daysInput" placeholder="Days" min="1" />
+      </div>
+      <div class="result" id="customProjection">Projected return: $0.00</div>
+    </div>
 
     <table>
       <thead>
@@ -357,11 +389,16 @@
       return value.toFixed(2);
     }
 
-    document.getElementById("projections").innerHTML = `
-      <div><strong>Projected in 30 days:</strong> $${projectValue(30)}</div>
-      <div><strong>Projected in 60 days:</strong> $${projectValue(60)}</div>
-      <div><strong>Projected in 90 days:</strong> $${projectValue(90)}</div>
-    `;
+    document.getElementById("daysInput").addEventListener("input", () => {
+      const days = parseInt(document.getElementById("daysInput").value);
+      const resultDiv = document.getElementById("customProjection");
+      if (!isNaN(days) && days > 0) {
+        const projected = projectValue(days);
+        resultDiv.textContent = `Projected return: $${projected}`;
+      } else {
+        resultDiv.textContent = 'Projected return: $0.00';
+      }
+    });
 
     const ctx = document.getElementById('growthChart').getContext('2d');
     const chart = new Chart(ctx, {
